@@ -1,0 +1,25 @@
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100vh;
+  background: #6b0297;
+  background: linear-gradient(#6b0297, #e447e0);
+
+  &__container {
+    width: 1200px;
+    margin: 85px auto 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+    &--game {
+      box-shadow: 0 20px 20px 3px #000000c9;
+    }
+
+    &--settings {
+      justify-content: center;
+    }
+  }
+}

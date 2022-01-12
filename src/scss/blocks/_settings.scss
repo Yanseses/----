@@ -1,0 +1,107 @@
+.settings {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  text-align: center;
+  color: #fff;
+  width: 100%;
+
+  &__heading {
+    width: inherit;
+    margin-top: 0;
+  }
+
+  &__description {
+    max-width: 450px;
+    text-align: center;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  &__container {
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: inherit;
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  &__label {
+    position: relative;
+  }
+
+  &__calc-btn {
+    position: absolute;
+    width: 41px;
+    height: 41px;
+    font-size: 36px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    background-color: inherit;
+    color: inherit;
+    transition: 0.3s;
+
+    &--up {
+      right: 0;
+    }
+
+    &--down {
+      left: 0;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:hover {
+      transform: scale(1.30);
+      transition: 0.3s;
+    }
+  }
+
+  &__input {
+    font-size: 18px;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    border-radius: 30px;
+    color: #fff;
+    background-color: #79a7c9;
+    box-shadow: 0 2px 9px 3px #3b5c75b3;
+
+    &::placeholder {
+      color: #fff;
+    }
+  }
+
+  &__button {
+    font-size: 18px;
+    padding: 15px 25px;
+    border-radius: 30px;
+    border: none;
+    background-color: #79a7c9;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 3px 5px 3px #3b5c75b3;
+    transition: 0.3s;
+
+    &:hover {
+      background-color: #fff;
+      box-shadow: 0 5px 7px 5px #3b5c75b3;
+      color: #79a7c9;
+      transition: 0.3s;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      box-shadow: 0 1px 5px 3px #3b5c75b3;
+      transition: 0.3s;
+    }
+  }
+}
