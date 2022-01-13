@@ -172,7 +172,8 @@ function createQuastionWindow() {
   var noMoreTimeBtn = creatorTags('button', ['question__button'], {
     type: 'button'
   }, QUASTION.noMoreTime);
-  block.append(headText, moreTimeBtn, noMoreTimeBtn);
+  wrapperBtn.append(moreTimeBtn, noMoreTimeBtn);
+  block.append(headText, wrapperBtn);
   backBlock.append(block);
   return {
     backBlock: backBlock,

@@ -1,6 +1,6 @@
 import { creatorTags } from '../creatorTags.js';
 
-export function createCardList(){
+export function createCardList() {
   const list = creatorTags('ul', ['card-list']);
   const gameSize = Number(sessionStorage.getItem('size'));
   let maxCards = Math.pow(gameSize, 2);
@@ -24,7 +24,7 @@ export function createCardList(){
     arrBack[randomNum] = cardElem;
   }
 
-  switch(gameSize){
+  switch (gameSize) {
     case 2: {
       document.documentElement.style.setProperty('--max-width', '49.5%');
       document.documentElement.style.setProperty('--max-height', '320px');
@@ -62,7 +62,12 @@ export function createCardList(){
     const card = creatorTags('li', ['card-list__item']);
     const scene = creatorTags('ul', ['card-list__scene']);
     const frontCard = creatorTags('li', ['card-list__scene-front']);
-    const backCard = creatorTags('li', ['card-list__scene-back'], null, arrBack[i]);
+    const backCard = creatorTags(
+      'li',
+      ['card-list__scene-back'],
+      null,
+      arrBack[i]
+    );
     cards[i] = new Object();
 
     scene.append(frontCard, backCard);
@@ -73,6 +78,6 @@ export function createCardList(){
     cards[i].value = arrBack[i];
     cards[i].fliped = false;
   }
-  
+
   return { list, cards, arrCards };
 }

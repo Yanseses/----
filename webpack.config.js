@@ -5,7 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = (env) => ({
   entry: './src/js/main.js',
   output: {
-    filename: 'main.[contenthash].js'
+    filename: 'main.[contenthash].js',
+    clean: true,
   },
   devServer: {
     hot: true,
@@ -19,16 +20,16 @@ module.exports = (env) => ({
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
+            presets: ['@babel/preset-env'],
+          },
+        },
       },
       {
         test: /\.s[ac]ss$/i,
         use: [
           env.prod ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
-          'sass-loader'
+          'sass-loader',
         ],
       },
       {
@@ -40,23 +41,18 @@ module.exports = (env) => ({
   performance: {
     hints: false,
     maxEntrypointSize: 512000,
-    maxAssetSize: 512000
+    maxAssetSize: 512000,
   },
   optimization: {
-    minimizer: [
-      new CssMinimizerPlugin(),
-    ],
+    minimizer: [new CssMinimizerPlugin()],
   },
   plugins: [
-    new MiniCssExtractPlugin(
-      {
-        filename: 'main.[contenthash].css',
-      }
-    ),
-    new HtmlWebpackPlugin(
-      {
-        template: './src/index.html'
-      }
-    ),
+    new MiniCssExtractPlugin({
+      filename: 'main.[contenthash].css',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Find Match',
+      filename: 'index.html',
+    }),
   ],
 });
