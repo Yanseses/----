@@ -1,6 +1,7 @@
 .card-list {
   margin: 0;
   padding: 0;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -8,7 +9,7 @@
   &__item {
     list-style: none;
     width: var(--max-width);
-    height: var(--max-height);
+    height: auto;
     font-size: var(--font-card);
     text-align: center;
     transition: 0.2s;

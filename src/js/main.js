@@ -2,10 +2,10 @@ import '../scss/style.scss';
 import { TIMERS } from './constants.js';
 import { createHeader } from './dom/createHeader.js';
 import { createMain } from './dom/createMain.js';
-import { createStartWindow } from './dom/createStartWindow.js';
-import { createQuastionWindow } from './dom/createQuastionWindow.js';
-import { createFinalWindow } from './dom/createFinalWindow.js';
-import { createCardList } from './dom/createCardList.js';
+import { createStartWindow } from './dom/createStart.js';
+import { createPopUp } from './dom/createPopUp.js';
+import { createFinish } from './dom/createFinish.js';
+import { createCards } from './dom/createCards.js';
 import { checkWinGame } from './checkWinGame.js';
 
 const header = createHeader(false);
@@ -23,7 +23,7 @@ createdWindow.submitBtn.addEventListener('click', function (e) {
   sessionStorage.setItem('size', inputValue);
 
   if (inputValue > 7) {
-    const createdQuastion = createQuastionWindow();
+    const createdQuastion = createPopUp();
     main.container.append(createdQuastion.backBlock);
     sessionStorage.setItem('timer', TIMERS.standartTimer);
 
@@ -47,7 +47,7 @@ function gameStart() {
   document.body.innerHTML = '';
   const createdHead = createHeader(true);
   const createdMain = createMain(true);
-  const createdCardList = createCardList();
+  const createdCardList = createCards();
   const listScene = createdCardList.arrCards;
   let timeOver = false;
   let lockerCards = false;
@@ -112,7 +112,7 @@ function gameStart() {
       document.body.innerHTML = '';
       const header = createHeader(false);
       const createdMain = createMain(false);
-      const final = createFinalWindow(checkWin);
+      const final = createFinish(checkWin);
 
       final.replayBtn.addEventListener('click', function (e) {
         e.preventDefault();
@@ -182,3 +182,33 @@ function gameStart() {
     }
   }
 }
+
+// New version
+async function renderPage(page) {
+  document.body.append(header.head, main.container);
+
+  switch (page) {
+    case 'start': {
+      let { createPopUp } = await import('./dom/createPopUp.js');
+      let { createStart } = await import('./dom/createStart.js');
+
+      break;
+    }
+    case 'game': {
+      let { createCards } = await import('./dom/createCards.js');
+
+      break;
+    }
+    case 'finish': {
+      let { createFinish } = await import('./dom/createFinish.js');
+
+      break;
+    }
+  }
+}
+
+// function changePage(page) {
+//   switch(page){
+//     case '': {}
+//   }
+// }

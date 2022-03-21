@@ -1,6 +1,6 @@
 import { creatorTags } from '../creatorTags.js';
 
-export function createCardList() {
+export function createCards() {
   const list = creatorTags('ul', ['card-list']);
   const gameSize = Number(sessionStorage.getItem('size'));
   let maxCards = Math.pow(gameSize, 2);

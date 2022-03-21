@@ -27,7 +27,6 @@ export function createHeader(game) {
   );
 
   fixer.append(toStartBtn, headTitle, replayBtn);
-
   head.append(fixer);
 
   return { head, headTitle, toStartBtn, replayBtn };

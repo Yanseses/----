@@ -1,7 +1,7 @@
 import { QUASTION } from '../constants.js';
 import { creatorTags } from '../creatorTags.js';
 
-export function createQuastionWindow() {
+export function createPopUp() {
   const backBlock = creatorTags('div', ['question']);
   const block = creatorTags('div', ['question__container']);
   const headText = creatorTags(

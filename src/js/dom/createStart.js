@@ -1,7 +1,7 @@
 import { creatorTags } from '../creatorTags.js';
 import { START_WINDOW } from '../constants.js';
 
-export function createStartWindow(value = 4) {
+export function createStart(value = 4) {
   const form = creatorTags('div', ['settings']);
   const description = creatorTags(
     'p',

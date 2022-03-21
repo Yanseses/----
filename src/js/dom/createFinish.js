@@ -1,7 +1,7 @@
 import { creatorTags } from '../creatorTags.js';
 import { FINAL_WINDOW } from '../constants.js';
 
-export function createFinalWindow(win) {
+export function createFinish(win) {
   const finalContainer = creatorTags('div', ['settings']);
   const finalHeading = creatorTags(
     'h2',
