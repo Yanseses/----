@@ -4,7 +4,7 @@ RU:
 Стек технологий: Vanila JS, scss, Webpack 3 
   
 EN:  
-Game: find a couple. 5 difficulty options  
+Game: find a match. 5 difficulty options  
 Technology stack: Vanila JS, scss, Webpack 3
 
 
