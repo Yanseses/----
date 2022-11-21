@@ -2,7 +2,7 @@ import '../scss/style.scss';
 import { TIMERS } from './constants.js';
 import { createHeader } from './dom/createHeader.js';
 import { createMain } from './dom/createMain.js';
-import { createStartWindow } from './dom/createStart.js';
+import { createStart } from './dom/createStart.js';
 import { createPopUp } from './dom/createPopUp.js';
 import { createFinish } from './dom/createFinish.js';
 import { createCards } from './dom/createCards.js';
@@ -11,7 +11,7 @@ import { checkWinGame } from './checkWinGame.js';
 const header = createHeader(false);
 const main = createMain(false);
 const gameContainer = main.section;
-const createdWindow = createStartWindow();
+const createdWindow = createStart();
 
 document.body.append(header.head, main.container);
 gameContainer.append(createdWindow.form);
@@ -182,33 +182,3 @@ function gameStart() {
     }
   }
 }
-
-// New version
-async function renderPage(page) {
-  document.body.append(header.head, main.container);
-
-  switch (page) {
-    case 'start': {
-      let { createPopUp } = await import('./dom/createPopUp.js');
-      let { createStart } = await import('./dom/createStart.js');
-
-      break;
-    }
-    case 'game': {
-      let { createCards } = await import('./dom/createCards.js');
-
-      break;
-    }
-    case 'finish': {
-      let { createFinish } = await import('./dom/createFinish.js');
-
-      break;
-    }
-  }
-}
-
-// function changePage(page) {
-//   switch(page){
-//     case '': {}
-//   }
-// }
