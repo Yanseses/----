@@ -73,18 +73,21 @@ function createHeader(game) {
   var head = creatorTags('header', ['header']);
   var fixer = creatorTags('div', ['header__container']);
   var headTitle = creatorTags('h2', ['header__title'], null, game ? timer : START_WINDOW.head);
-  var toStartBtn = creatorTags('button', game ? ['header__btn'] : ['header__btn', 'header__btn--hide']);
-  var replayBtn = creatorTags('button', game ? ['header__btn'] : ['header__btn', 'header__btn--hide']);
+  var toStartBtn = creatorTags('button', game ? ['header__btn', 'header__btn--quit'] : ['header__btn', 'header__btn--hide'], {
+    type: 'button',
+    title: 'В начало'
+  });
+  var replayBtn = creatorTags('button', game ? ['header__btn', 'header__btn--restart'] : ['header__btn', 'header__btn--hide'], {
+    type: 'button',
+    title: 'Рестарт'
+  });
   fixer.append(toStartBtn, headTitle, replayBtn);
-  toStartBtn.addEventListener('click', function () {// Выход на главную
-  });
-  replayBtn.addEventListener('click', function () {
-    location.reload();
-  });
   head.append(fixer);
   return {
     head: head,
-    headTitle: headTitle
+    headTitle: headTitle,
+    toStartBtn: toStartBtn,
+    replayBtn: replayBtn
   };
 }
 ;// CONCATENATED MODULE: ./src/js/dom/createMain.js
@@ -102,10 +105,10 @@ function createMain(game) {
     section: section
   };
 }
-;// CONCATENATED MODULE: ./src/js/dom/createStartWindow.js
+;// CONCATENATED MODULE: ./src/js/dom/createStart.js
 
 
-function createStartWindow() {
+function createStart() {
   var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 4;
   var form = creatorTags('div', ['settings']);
   var description = creatorTags('p', ['settings__description'], null, START_WINDOW.description);
@@ -158,20 +161,25 @@ function createStartWindow() {
     input: input
   };
 }
-;// CONCATENATED MODULE: ./src/js/dom/createQuastionWindow.js
+;// CONCATENATED MODULE: ./src/js/dom/createPopUp.js
 
 
-function createQuastionWindow() {
+function createPopUp() {
   var backBlock = creatorTags('div', ['question']);
   var block = creatorTags('div', ['question__container']);
   var headText = creatorTags('h3', ['question__heading'], null, QUASTION.heading);
-  var wrapperBtn = creatorTags('div', ['quastion__btn-wrapper']);
+  var wrapperBtn = creatorTags('div', ['question__btn-wrapper']);
   var moreTimeBtn = creatorTags('button', ['question__button'], {
     type: 'button'
   }, QUASTION.moreTime);
   var noMoreTimeBtn = creatorTags('button', ['question__button'], {
     type: 'button'
   }, QUASTION.noMoreTime);
+  backBlock.addEventListener('click', function (e) {
+    if (e.target == this) {
+      this.remove();
+    }
+  });
   wrapperBtn.append(moreTimeBtn, noMoreTimeBtn);
   block.append(headText, wrapperBtn);
   backBlock.append(block);
@@ -181,10 +189,10 @@ function createQuastionWindow() {
     moreTimeBtn: moreTimeBtn
   };
 }
-;// CONCATENATED MODULE: ./src/js/dom/createFinalWindow.js
+;// CONCATENATED MODULE: ./src/js/dom/createFinish.js
 
 
-function createFinalWindow(win) {
+function createFinish(win) {
   var finalContainer = creatorTags('div', ['settings']);
   var finalHeading = creatorTags('h2', ['settings__heading'], null, win ? FINAL_WINDOW.winHead : FINAL_WINDOW.looseHead);
   var finalDescription = creatorTags('p', ['settings__description'], null, FINAL_WINDOW.descr);
@@ -197,17 +205,15 @@ function createFinalWindow(win) {
   }, FINAL_WINDOW.buttons.repeat);
   btnContainer.append(replayBtn, startWindowBtn);
   finalContainer.append(finalHeading, finalDescription, btnContainer);
-  replayBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-  });
-  startWindowBtn.addEventListener('click', function () {
-    window.location.reload();
-  });
-  return finalContainer;
+  return {
+    finalContainer: finalContainer,
+    replayBtn: replayBtn,
+    startWindowBtn: startWindowBtn
+  };
 }
-;// CONCATENATED MODULE: ./src/js/dom/createCardList.js
+;// CONCATENATED MODULE: ./src/js/dom/createCards.js
 
-function createCardList() {
+function createCards() {
   var list = creatorTags('ul', ['card-list']);
   var gameSize = Number(sessionStorage.getItem('size'));
   var maxCards = Math.pow(gameSize, 2);
@@ -295,11 +301,82 @@ function createCardList() {
     arrCards: arrCards
   };
 }
-;// CONCATENATED MODULE: ./src/js/dom/createdTimer.js
-function createdTimer(timeContainer) {
-  var timeIsOver = false;
+;// CONCATENATED MODULE: ./src/js/checkWinGame.js
+function checkWinGame(obj) {
+  var checkArray = new Array();
+  Object.keys(obj).forEach(function (el) {
+    checkArray.push(obj[el].fliped);
+  });
+
+  if (checkArray.includes(false)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+;// CONCATENATED MODULE: ./src/js/main.js
+
+
+
+
+
+
+
+
+
+var header = createHeader(false);
+var main = createMain(false);
+var gameContainer = main.section;
+var createdWindow = createStart();
+document.body.append(header.head, main.container);
+gameContainer.append(createdWindow.form);
+createdWindow.submitBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  var inputValue = createdWindow.input.value;
+  sessionStorage.setItem('size', inputValue);
+
+  if (inputValue > 7) {
+    var createdQuastion = createPopUp();
+    main.container.append(createdQuastion.backBlock);
+    sessionStorage.setItem('timer', TIMERS.standartTimer);
+    createdQuastion.noMoreTimeBtn.addEventListener('click', function () {
+      createdQuastion.backBlock.remove();
+      gameStart();
+    });
+    createdQuastion.moreTimeBtn.addEventListener('click', function () {
+      createdQuastion.backBlock.remove();
+      sessionStorage.setItem('timer', TIMERS.bigTimer);
+      gameStart();
+    });
+  } else {
+    sessionStorage.setItem('timer', TIMERS.standartTimer);
+    gameStart();
+  }
+});
+
+function gameStart() {
+  document.body.innerHTML = '';
+  var createdHead = createHeader(true);
+  var createdMain = createMain(true);
+  var createdCardList = createCards();
+  var listScene = createdCardList.arrCards;
+  var timeOver = false;
+  var lockerCards = false;
+  var firstCard = new Object();
+  var secondCard = new Object();
+  listScene.forEach(function (card) {
+    return card.addEventListener('click', flipper);
+  });
+  createdMain.section.append(createdCardList.list);
+  document.body.append(createdHead.head, createdMain.container);
+  createdHead.toStartBtn.addEventListener('click', function () {
+    location.reload();
+  });
+  createdHead.replayBtn.addEventListener('click', function () {
+    gameStart();
+  });
   var timer = setInterval(function () {
-    var arrowTime = timeContainer.textContent.split(':');
+    var arrowTime = createdHead.headTitle.textContent.split(':');
     var minute = arrowTime[0];
     var seconds = arrowTime[1];
     arrowTime = new Array();
@@ -322,84 +399,24 @@ function createdTimer(timeContainer) {
     var result = arrowTime.join(':');
 
     if (minute == '00' && seconds < 4) {
-      if (timeContainer.classList.contains('header__title--alert')) {
-        timeContainer.classList.remove('header__title--alert');
+      if (createdHead.headTitle.classList.contains('header__title--alert')) {
+        createdHead.headTitle.classList.remove('header__title--alert');
       }
 
-      timeContainer.classList.add('header__title--alert');
+      createdHead.headTitle.classList.add('header__title--alert');
     }
 
     if (result == '00:00') {
-      timeIsOver = true;
+      timeOver = true;
+      clearInterval(timer);
     }
 
-    timeContainer.textContent = result;
+    createdHead.headTitle.textContent = result;
   }, 1000);
-  return {
-    timer: timer,
-    timeIsOver: timeIsOver
-  };
-}
-;// CONCATENATED MODULE: ./src/js/main.js
-
-
-
-
-
-
-
-
-
-var header = createHeader(false);
-var main = createMain(false);
-var gameContainer = main.section;
-var createdWindow = createStartWindow();
-document.body.append(header.head, main.container);
-gameContainer.append(createdWindow.form);
-createdWindow.submitBtn.addEventListener('click', function (e) {
-  e.preventDefault();
-  var inputValue = createdWindow.input.value;
-  sessionStorage.setItem('size', inputValue);
-
-  if (inputValue > 7) {
-    var createdQuastion = createQuastionWindow();
-    main.container.append(createdQuastion.backBlock);
-    sessionStorage.setItem('timer', TIMERS.standartTimer);
-    createdQuastion.noMoreTimeBtn.addEventListener('click', function () {
-      createdQuastion.backBlock.remove();
-      gameStart();
-    });
-    createdQuastion.moreTimeBtn.addEventListener('click', function () {
-      createdQuastion.backBlock.remove();
-      sessionStorage.setItem('timer', TIMERS.bigTimer);
-      gameStart();
-    });
-  } else {
-    sessionStorage.setItem('timer', TIMERS.standartTimer);
-    gameStart();
-  }
-});
-
-function gameStart() {
-  document.body.innerHTML = '';
-  var createdHead = createHeader(true);
-  var createdMain = createMain(true);
-  var createdCardList = createCardList();
-  var listScene = createdCardList.arrCards;
-  var lockerCards = false;
-  var firstCard = new Object();
-  var secondCard = new Object();
-  listScene.forEach(function (card) {
-    return card.addEventListener('click', flipper);
-  });
-  createdMain.section.append(createdCardList.list);
-  document.body.append(createdHead.head, createdMain.container);
-  var timerChecker = createdTimer(createdHead.headTitle);
   var intervalWin = setInterval(function () {
     var checkWin = checkWinGame(createdCardList.cards);
 
-    if (timerChecker.timeIsOver || checkWin) {
-      clearInterval(timerChecker.timer);
+    if (timeOver || checkWin) {
       clearInterval(intervalWin);
       document.body.innerHTML = '';
 
@@ -407,9 +424,18 @@ function gameStart() {
 
       var _createdMain = createMain(false);
 
-      var _final = createFinalWindow(checkWin);
+      var _final = createFinish(checkWin);
 
-      _createdMain.section.append(_final);
+      _final.replayBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        gameStart();
+      });
+
+      _final.startWindowBtn.addEventListener('click', function () {
+        window.location.reload();
+      });
+
+      _createdMain.section.append(_final.finalContainer);
 
       document.body.append(_header.head, _createdMain.container);
     }
@@ -471,19 +497,6 @@ function gameStart() {
       }, 1000);
       return false;
     }
-  }
-}
-
-function checkWinGame(obj) {
-  var checkArray = new Array();
-  Object.keys(obj).forEach(function (el) {
-    checkArray.push(obj[el].fliped);
-  });
-
-  if (checkArray.includes(false)) {
-    return false;
-  } else {
-    return true;
   }
 }
 /******/ })()
